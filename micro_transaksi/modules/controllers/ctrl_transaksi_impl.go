@@ -18,17 +18,20 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
+	"github.com/rabbitmq/amqp091-go"
 )
 
 type CtrlTransaksiImpl struct {
 	ServTransaksi services.ServTransaksi
 	Validate      *validator.Validate
+	Ch            *amqp091.Channel
 }
 
-func NewCtrlTransaksiImpl(servtransaksi services.ServTransaksi, validate *validator.Validate) CtrlTransaksi {
+func NewCtrlTransaksiImpl(servtransaksi services.ServTransaksi, validate *validator.Validate, ch *amqp091.Channel) CtrlTransaksi {
 	return &CtrlTransaksiImpl{
 		ServTransaksi: servtransaksi,
 		Validate:      validate,
+		Ch:            ch,
 	}
 }
 
@@ -232,17 +235,38 @@ func (ctrl *CtrlTransaksiImpl) Transaksi(ctx *gin.Context) {
 			"qty":%v,
 			"total":%v,
 			"email_receiver":"%v"}`, accessClaim.Username, product.Name, product.Harga, transaksiReq.Quantity, total, accessClaim.Email)
-		BodyEmail := strings.NewReader(bodyEm)
-		reqEmail, err := http.NewRequest(http.MethodPost, "http://localhost:6060/email", BodyEmail)
-		if err != nil {
-			ctx.AbortWithStatusJSON(http.StatusInternalServerError, responses.FailRes{
-				Code:    http.StatusInternalServerError,
-				Message: responses.SomethingWentWrong,
-				Error:   err.Error(),
+		err := ctrl.Ch.PublishWithContext(
+			ctx,
+			"ex_learn_micro",
+			"PWSD",
+			false,
+			false,
+			amqp091.Publishing{
+				ContentType: "text/json",
+				Body:        []byte(bodyEm),
 			})
-			return
+		if err != nil {
+			panic(err)
 		}
-		client.Do(reqEmail)
+		//without message broker
+		// bodyEm := fmt.Sprintf(`{
+		// 	"name_receiver":"%v",
+		// 	"name_product" :"%v",
+		// 	"harga":%v,
+		// 	"qty":%v,
+		// 	"total":%v,
+		// 	"email_receiver":"%v"}`, accessClaim.Username, product.Name, product.Harga, transaksiReq.Quantity, total, accessClaim.Email)
+		// BodyEmail := strings.NewReader(bodyEm)
+		// reqEmail, err := http.NewRequest(http.MethodPost, "http://localhost:6060/email", BodyEmail)
+		// if err != nil {
+		// 	ctx.AbortWithStatusJSON(http.StatusInternalServerError, responses.FailRes{
+		// 		Code:    http.StatusInternalServerError,
+		// 		Message: responses.SomethingWentWrong,
+		// 		Error:   err.Error(),
+		// 	})
+		// 	return
+		// }
+		// client.Do(reqEmail)
 	}()
 
 	//jika semua kriteria terpenuhi maka lakukan update data pada table product dan balance

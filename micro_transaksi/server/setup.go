@@ -14,11 +14,13 @@ type Controllers struct {
 }
 
 func NewSetup() Controllers {
-	db := db.NewDBPostges()
+
+	dbStore := db.NewDBPostges()
+	ch := db.NewRabbitMQ()
 	validate := validator.New()
-	repoTransaksi := repository.NewRepoTransaksiImpl(db)
+	repoTransaksi := repository.NewRepoTransaksiImpl(dbStore)
 	srvTransaksi := services.NewServTransaksiImpl(repoTransaksi)
-	ctrlTransaksi := controllers.NewCtrlTransaksiImpl(srvTransaksi, validate)
+	ctrlTransaksi := controllers.NewCtrlTransaksiImpl(srvTransaksi, validate, ch)
 	return Controllers{
 		CtrlTransaksi: ctrlTransaksi,
 	}
