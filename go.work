@@ -1,0 +1,9 @@
+go 1.19
+
+use (
+	./micro_user
+	./micro_product
+	./micro_balance
+	./micro_transaksi
+	./micro_email
+)
