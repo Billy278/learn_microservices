@@ -102,7 +102,7 @@ func (ctrl *CtrlTransaksiImpl) Transaksi(ctx *gin.Context) {
 	}
 	//===================================================================================
 	//get data user
-	req, err := http.NewRequest(http.MethodGet, "http://localhost:9090/product/"+strconv.Itoa(int(transaksiReq.Id_Product)), nil)
+	req, err := http.NewRequest(http.MethodGet, "http://backendProduct:9090/product/"+strconv.Itoa(int(transaksiReq.Id_Product)), nil)
 	//req, err := http.NewRequest(http.MethodGet, "http://localhost:9090/product/10", nil)
 	if err != nil {
 		ctx.AbortWithStatusJSON(http.StatusInternalServerError, responses.FailRes{
@@ -164,7 +164,7 @@ func (ctrl *CtrlTransaksiImpl) Transaksi(ctx *gin.Context) {
 
 	//===================================================================================
 	//get data balance
-	req, err = http.NewRequest(http.MethodGet, "http://localhost:8090/balance/"+strconv.Itoa(int(transaksiReq.Id_User)), nil)
+	req, err = http.NewRequest(http.MethodGet, "http://backendBalance:8090/balance/"+strconv.Itoa(int(transaksiReq.Id_User)), nil)
 	if err != nil {
 		ctx.AbortWithStatusJSON(http.StatusInternalServerError, responses.FailRes{
 			Code:    http.StatusInternalServerError,
@@ -275,7 +275,7 @@ func (ctrl *CtrlTransaksiImpl) Transaksi(ctx *gin.Context) {
 	//update data product
 	bodypro := fmt.Sprintf(`{"stock":%v}`, product.Stock)
 	bodyProduct := strings.NewReader(bodypro)
-	requpdateProduct, err := http.NewRequest(http.MethodPut, "http://localhost:9090/products/"+strconv.Itoa(int(transaksiReq.Id_Product)), bodyProduct)
+	requpdateProduct, err := http.NewRequest(http.MethodPut, "http://backendProduct:9090/products/"+strconv.Itoa(int(transaksiReq.Id_Product)), bodyProduct)
 	if err != nil {
 		ctx.AbortWithStatusJSON(http.StatusInternalServerError, responses.FailRes{
 			Code:    http.StatusInternalServerError,
@@ -300,7 +300,7 @@ func (ctrl *CtrlTransaksiImpl) Transaksi(ctx *gin.Context) {
 	fmt.Println("aaaaaaa")
 	fmt.Println(balance.Saldo)
 	bodyBalance := strings.NewReader(bodyblc)
-	reqBalanceUpdate, err := http.NewRequest(http.MethodPut, "http://localhost:8090/balance/"+strconv.Itoa(int(transaksiReq.Id_User)), bodyBalance)
+	reqBalanceUpdate, err := http.NewRequest(http.MethodPut, "http://backendBalance:8090/balance/"+strconv.Itoa(int(transaksiReq.Id_User)), bodyBalance)
 	if err != nil {
 		ctx.AbortWithStatusJSON(http.StatusInternalServerError, responses.FailRes{
 			Code:    http.StatusInternalServerError,

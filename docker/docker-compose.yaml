@@ -1,0 +1,109 @@
+version: '3.8'
+
+services:
+  backendTransaksi:
+   container_name: backendTransaksi
+   build:
+    context: ../micro_transaksi/
+    dockerfile: Dockerfile
+   image: "app_transaksi:1.0.0"
+   networks:
+    - learn_micro
+   links:
+    - "ps_db_micro"
+    - "m_rabbitmq"
+   depends_on :
+    - "ps_db_micro"
+    - "m_rabbitmq"
+  backendUser:
+    container_name: backendUser
+    build:
+      context: ../micro_user/
+      dockerfile: Dockerfile
+    image: "app_user:1.0.0"
+    ports:
+      - 9090:8080
+    networks:
+      - learn_micro
+    links:
+      - "ps_db_micro"
+    depends_on:
+      - ps_db_micro
+  backendProduct:
+    container_name: backendProduct
+    build:
+      context: ../micro_product/
+      dockerfile: Dockerfile
+    image: app_product:1.0.0
+    networks:
+      - learn_micro
+    links:
+      - "ps_db_micro"
+    depends_on:
+      - ps_db_micro
+  backendEmail:
+    container_name: backendEmail
+    build:
+      context: ../micro_email/
+      dockerfile: Dockerfile
+    image: app_email:1.0.0
+    networks:
+      - learn_micro
+    links:
+      - "ps_db_micro"
+    depends_on:
+      - ps_db_micro
+  backendBalance:
+    container_name: backendBalance
+    build:
+      context: ../micro_balance/
+      dockerfile: Dockerfile
+    image: app_balance:1.0.0
+    networks:
+      - learn_micro
+    links:
+      - "ps_db_micro"
+    depends_on:
+      - ps_db_micro
+  ps_db_micro:
+    container_name: ps_db_micro
+    build:
+      context: ../DB
+      dockerfile: Dockerfile
+    image: db_microservices:1.0.0
+    restart: always
+    ports:
+      - "5440:5432"
+    environment:
+     POSTGRES_USER: postgres
+     POSTGRES_PASSWORD: billy
+     POSTGRES_DB: db_micro
+    networks:
+      - learn_micro
+  nginx_microservices:
+    container_name: nginx_microservices
+    build:
+      context: ../nginx
+      dockerfile: Dockerfile
+    image: nginx_micro:1.0.0
+    networks:
+      - learn_micro
+    restart: always
+    ports:
+      - "8081:80"
+    links:
+      - "backendTransaksi"
+    depends_on:
+      - backendTransaksi
+  m_rabbitmq:
+    container_name: m_rabbitmq
+    image: rabbitmq:3-management-alpine
+    networks:
+      - learn_micro
+    ports:
+      - "5678:5672"
+      - "15673:15672" 
+networks:
+  learn_micro:
+   name: learn_micro
+   driver: bridge

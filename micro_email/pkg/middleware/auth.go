@@ -2,9 +2,9 @@ package middleware
 
 import (
 	"fmt"
-	"micro_balance/modules/model"
-	"micro_balance/pkg/crypto"
-	"micro_balance/pkg/responses"
+	"micro_email/modules/model"
+	"micro_email/pkg/crypto"
+	"micro_email/pkg/responses"
 
 	"net/http"
 	"strings"
@@ -26,48 +26,6 @@ const (
 	//"Authorization"
 	Key string = "KEY"
 )
-
-func TestBearerOAuth() gin.HandlerFunc {
-	return func(ctx *gin.Context) {
-		//auth header
-		header := ctx.GetHeader(string(Author))
-		if header == "" {
-			ctx.AbortWithStatusJSON(http.StatusUnauthorized, responses.FailRes{
-				Code:    http.StatusUnauthorized,
-				Message: "NOT AUTH",
-				Error:   responses.Unauthorized,
-			})
-			return
-		}
-		//get token
-
-		token := strings.Split(header, Bearer)
-		fmt.Println(token)
-		if len(token) != 2 {
-			ctx.AbortWithStatusJSON(http.StatusUnauthorized, responses.FailRes{
-				Code:    http.StatusUnauthorized,
-				Message: "Invalid token",
-				Error:   responses.Unauthorized,
-			})
-			return
-		}
-		var claim model.AccessClaim
-		fmt.Println(claim)
-		err := crypto.ParseJWT(token[1], &claim)
-		fmt.Println(claim)
-		if err != nil {
-			ctx.AbortWithStatusJSON(http.StatusUnauthorized, responses.FailRes{
-				Code:    http.StatusUnauthorized,
-				Message: "failed token",
-				Error:   responses.Unauthorized,
-			})
-			return
-		}
-		ctx.Set(AccessClaim, claim)
-		ctx.Next()
-
-	}
-}
 
 func BearerOAuth() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
