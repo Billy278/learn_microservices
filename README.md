@@ -22,7 +22,6 @@
 - /balance/:id [DELETE]
 
 3. Email :
-   r.POST("/email", ctrlEmail.SendEmail)
 
 - /email [POST]
 
@@ -35,7 +34,7 @@
 - /products/:id [PUT] =>update product using by service taransaksi
 - /product/:id [DELETE]
 
-r.POST("/transaksi", ctrlTransaksi.Transaksi) 5. Product :
+ 5. Product :
 
 - /transaksi [POST] => create transaksi
 
