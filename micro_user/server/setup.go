@@ -3,6 +3,7 @@ package server
 import (
 	"micro_user/db"
 	"micro_user/modules/controllers"
+	"micro_user/modules/handler"
 	"micro_user/modules/repository"
 	"micro_user/modules/services"
 
@@ -23,5 +24,14 @@ func NewSetup() Controllers {
 	return Controllers{
 		UserCtrl: userCtrl,
 	}
+
+}
+func GRPCSetup() *handler.GRPCuserImpl {
+	db := db.NewDBPostges()
+	userRepo := repository.NewUserRepoImpl(db)
+	userServ := services.NewUserServImpl(userRepo)
+	userCtrl := handler.NewGRPCuserImpl(userServ)
+
+	return userCtrl
 
 }
