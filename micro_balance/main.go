@@ -3,13 +3,18 @@ package main
 import (
 	"log"
 	"micro_balance/server"
+	"os"
 
 	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
 )
 
 func main() {
-	server.NewServer()
+	if os.Getenv("MODE") == "GRPC" {
+		server.NewGRPCServer()
+	} else {
+		server.NewServer()
+	}
 }
 func init() {
 	err := godotenv.Load()

@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package proto;
 
-option go_package="micro_user/modules/common/proto";
+option go_package="micro_user/modules/proto";
 
 message User{
     int32 id =1;
