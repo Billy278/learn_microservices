@@ -2,7 +2,7 @@
 
 ## ARSITECTUR AND TABLE
 
-![Getting Started](image.png)
+![Getting Started](img.png)
 
 ## Endpoint:
 
@@ -34,7 +34,7 @@
 - /products/:id [PUT] =>update product using by service taransaksi
 - /product/:id [DELETE]
 
- 5. Product :
+5.  Product :
 
 - /transaksi [POST] => create transaksi
 
