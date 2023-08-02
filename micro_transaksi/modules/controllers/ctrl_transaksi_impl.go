@@ -101,7 +101,7 @@ func (ctrl *CtrlTransaksiImpl) Transaksi(ctx *gin.Context) {
 		Transport: http.DefaultTransport,
 	}
 	//===================================================================================
-	//get data user
+	//get data transaksi
 	req, err := http.NewRequest(http.MethodGet, "http://backendProduct:9090/product/"+strconv.Itoa(int(transaksiReq.Id_Product)), nil)
 	//req, err := http.NewRequest(http.MethodGet, "http://localhost:9090/product/10", nil)
 	if err != nil {
