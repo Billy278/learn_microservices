@@ -2,7 +2,7 @@
 
 ## ARSITECTUR AND TABLE
 
-![Getting Started](image2.png)
+![Getting Started](img2.png)
 
 ## Endpoint:
 
