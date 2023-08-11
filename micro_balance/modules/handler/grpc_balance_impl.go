@@ -21,6 +21,7 @@ func NewGRPCBalanceImpl(balanceserv services.ServBalance) *GRPCBalanceImpl {
 }
 
 func (ctrl *GRPCBalanceImpl) Show(ctx context.Context, balanceIn *proto.Balance) (*proto.Response, error) {
+
 	res, err := ctrl.BalanceServ.ServShow(ctx)
 	if err != nil {
 		return &proto.Response{

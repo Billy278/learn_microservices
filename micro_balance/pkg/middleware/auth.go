@@ -20,80 +20,93 @@ const (
 	AccessClaim string       = "access_claim"
 	Author      Headerstring = "Authorization"
 	Bearer      string       = "Bearer "
-	//"Authorization"
-	//lama
-	//"Authorization"
+
 	Key string = "KEY"
 )
 
-func TestBearerOAuth() gin.HandlerFunc {
+// func BearerOAuth() gin.HandlerFunc {
+// 	return func(ctx *gin.Context) {
+// 		//auth header
+// 		header := ctx.GetHeader(string(Author))
+// 		if header != "" {
+// 			//get token
+// 			token := strings.Split(header, Bearer)
+// 			fmt.Println(token)
+// 			if len(token) != 2 {
+// 				ctx.AbortWithStatusJSON(http.StatusUnauthorized, responses.FailRes{
+// 					Code:    http.StatusUnauthorized,
+// 					Message: "Invalid token",
+// 					Error:   responses.Unauthorized,
+// 				})
+// 				return
+// 			}
+// 			var claim model.AccessClaim
+// 			err := crypto.ParseJWT(token[1], &claim)
+// 			if err != nil {
+// 				ctx.AbortWithStatusJSON(http.StatusUnauthorized, responses.FailRes{
+// 					Code:    http.StatusUnauthorized,
+// 					Message: "failed token",
+// 					Error:   responses.Unauthorized,
+// 				})
+// 				return
+// 			}
+// 			ctx.Set(AccessClaim, claim)
+// 			ctx.Next()
+// 		} else {
+// 			ctx.AbortWithStatusJSON(http.StatusUnauthorized, responses.FailRes{
+// 				Code:    http.StatusUnauthorized,
+// 				Message: "NOT AUTH",
+// 				Error:   responses.Unauthorized,
+// 			})
+// 			return
+// 		}
+// 	}
+// }
+// func KeyAuth() gin.HandlerFunc {
+// 	return func(ctx *gin.Context) {
+// 		//auth header
+// 		k := ctx.GetHeader(Key)
+
+// 		if k == "" {
+// 			ctx.AbortWithStatusJSON(http.StatusUnauthorized, responses.FailRes{
+// 				Code:    http.StatusUnauthorized,
+// 				Message: "KEY Failed",
+// 				Error:   responses.Unauthorized,
+// 			})
+// 			return
+// 		}
+// 		if k != crypto.SharedKey {
+// 			ctx.AbortWithStatusJSON(http.StatusUnauthorized, responses.FailRes{
+// 				Code:    http.StatusUnauthorized,
+// 				Message: "KEY Faled",
+// 				Error:   responses.Unauthorized,
+// 			})
+// 			return
+// 		}
+// 		ctx.Next()
+// 	}
+// }
+
+func BearerOAuthZ() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
+
 		//auth header
 		header := ctx.GetHeader(string(Author))
-		if header == "" {
-			ctx.AbortWithStatusJSON(http.StatusUnauthorized, responses.FailRes{
-				Code:    http.StatusUnauthorized,
-				Message: "NOT AUTH",
-				Error:   responses.Unauthorized,
-			})
-			return
-		}
-		//get token
+		k := ctx.GetHeader(Key)
 
-		token := strings.Split(header, Bearer)
-		fmt.Println(token)
-		if len(token) != 2 {
-			ctx.AbortWithStatusJSON(http.StatusUnauthorized, responses.FailRes{
-				Code:    http.StatusUnauthorized,
-				Message: "Invalid token",
-				Error:   responses.Unauthorized,
-			})
-			return
-		}
-		var claim model.AccessClaim
-		fmt.Println(claim)
-		err := crypto.ParseJWT(token[1], &claim)
-		fmt.Println(claim)
-		if err != nil {
-			ctx.AbortWithStatusJSON(http.StatusUnauthorized, responses.FailRes{
-				Code:    http.StatusUnauthorized,
-				Message: "failed token",
-				Error:   responses.Unauthorized,
-			})
-			return
-		}
-		ctx.Set(AccessClaim, claim)
-		ctx.Next()
-
-	}
-}
-
-func BearerOAuth() gin.HandlerFunc {
-	return func(ctx *gin.Context) {
-
-		//auth header
-		header := ctx.GetHeader(string(Author))
-		key := ctx.GetHeader(Key)
-		fmt.Println(key)
-		if key != "" {
-			fmt.Println(key)
-			if Key == crypto.SharedKey {
+		if k != "" {
+			if k == crypto.SharedKey {
 				ctx.Next()
 			} else {
-				ctx.Next()
-			}
-		} else {
-
-			if header == "" {
 				ctx.AbortWithStatusJSON(http.StatusUnauthorized, responses.FailRes{
 					Code:    http.StatusUnauthorized,
-					Message: "NOT AUTH",
+					Message: "Invalid KEY",
 					Error:   responses.Unauthorized,
 				})
 				return
 			}
+		} else if header != "" {
 			//get token
-
 			token := strings.Split(header, Bearer)
 			fmt.Println(token)
 			if len(token) != 2 {
@@ -116,6 +129,13 @@ func BearerOAuth() gin.HandlerFunc {
 			}
 			ctx.Set(AccessClaim, claim)
 			ctx.Next()
+		} else {
+			ctx.AbortWithStatusJSON(http.StatusUnauthorized, responses.FailRes{
+				Code:    http.StatusUnauthorized,
+				Message: "NOT AUTH",
+				Error:   responses.Unauthorized,
+			})
+			return
 		}
 	}
 }

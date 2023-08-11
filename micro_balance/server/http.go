@@ -13,7 +13,7 @@ import (
 
 func NewServer() {
 	s := gin.Default()
-	s.Use(gin.Recovery(), gin.Logger(), middleware.BearerOAuth())
+	s.Use(gin.Recovery(), gin.Logger(), middleware.BearerOAuthZ())
 	ctrl := NewSetup()
 	router.NewRouterBlnc(s, ctrl.CtrlBalance)
 	s.Run(":8090")
@@ -21,7 +21,7 @@ func NewServer() {
 
 func NewGRPCServer() {
 
-	srv := grpc.NewServer()
+	srv := grpc.NewServer(middleware.WithMiddlewareUnarryInceptor())
 	ctrl := GRPCSetup()
 	proto.RegisterBalancesServer(srv, ctrl)
 	l, err := net.Listen("tcp", ":8090")

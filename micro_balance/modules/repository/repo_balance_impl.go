@@ -50,7 +50,6 @@ func (repo *RepoBalanceImpl) RepoCreate(ctx context.Context, balanceIn model.Bal
 func (repo *RepoBalanceImpl) RepoFinById(ctx context.Context, balanceId uint64) (balanceRes model.Balance, err error) {
 	log := fmt.Sprintf("%T,RepoFinById", repo)
 	fmt.Println(log)
-	fmt.Println(balanceId)
 	sql := "SELECT id,user_id,saldo FROM balance WHERE id=$1"
 	row, err := repo.DB.QueryContext(ctx, sql, balanceId)
 	if err != nil {
@@ -81,7 +80,6 @@ func (repo *RepoBalanceImpl) RepoUpdate(ctx context.Context, balanceIn model.Bal
 func (repo *RepoBalanceImpl) RepoUpdateByUser(ctx context.Context, balanceIn model.Balance) (balanceRes model.Balance, err error) {
 	log := fmt.Sprintf("%T,RepoUpdateByUser", repo)
 	fmt.Println(log)
-	fmt.Println(balanceIn.Saldo)
 	sql := "UPDATE balance SET saldo=$1 WHERE user_id=$2"
 	_, err = repo.DB.ExecContext(ctx, sql, balanceIn.Saldo, balanceIn.UserId)
 	if err != nil {
