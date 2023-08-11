@@ -9,7 +9,7 @@ import (
 
 func NewServer() {
 	s := gin.Default()
-	s.Use(gin.Recovery(), gin.Logger(), middleware.BearerOAuth())
+	s.Use(gin.Recovery(), gin.Logger(), middleware.BearerOAuthZ())
 
 	ctrl := NewSetup()
 	router.NewRouter(s, ctrl.CtrlProduct)

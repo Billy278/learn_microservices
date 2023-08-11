@@ -27,32 +27,26 @@ const (
 	Key string = "KEY"
 )
 
-func BearerOAuth() gin.HandlerFunc {
+func BearerOAuthZ() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 
 		//auth header
 		header := ctx.GetHeader(string(Author))
-		key := ctx.GetHeader(Key)
-		fmt.Println(key)
-		if key != "" {
-			fmt.Println(key)
-			if Key == crypto.SharedKey {
+		k := ctx.GetHeader(Key)
+
+		if k != "" {
+			if k == crypto.SharedKey {
 				ctx.Next()
 			} else {
-				ctx.Next()
-			}
-		} else {
-
-			if header == "" {
 				ctx.AbortWithStatusJSON(http.StatusUnauthorized, responses.FailRes{
 					Code:    http.StatusUnauthorized,
-					Message: "NOT AUTH",
+					Message: "Invalid KEY",
 					Error:   responses.Unauthorized,
 				})
 				return
 			}
+		} else if header != "" {
 			//get token
-
 			token := strings.Split(header, Bearer)
 			fmt.Println(token)
 			if len(token) != 2 {
@@ -75,6 +69,13 @@ func BearerOAuth() gin.HandlerFunc {
 			}
 			ctx.Set(AccessClaim, claim)
 			ctx.Next()
+		} else {
+			ctx.AbortWithStatusJSON(http.StatusUnauthorized, responses.FailRes{
+				Code:    http.StatusUnauthorized,
+				Message: "NOT AUTH",
+				Error:   responses.Unauthorized,
+			})
+			return
 		}
 	}
 }
