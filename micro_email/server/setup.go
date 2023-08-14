@@ -3,6 +3,7 @@ package server
 import (
 	"micro_email/db"
 	"micro_email/modules/controllers"
+	"micro_email/modules/handler"
 	"micro_email/modules/repository"
 	"micro_email/modules/services"
 
@@ -22,4 +23,14 @@ func NewSetup() Controllers {
 	return Controllers{
 		CtrlEmail: ctrlEmail,
 	}
+}
+
+func GRPCSetup() *handler.HandlerEmailImpl {
+	db := db.NewDBPostges()
+	emailRepo := repository.NewRepoEmailImpl(db)
+	emailServ := services.NewServEmailImpl(emailRepo)
+	emailCtrl := handler.NewHandlerEmailImpl(emailServ)
+
+	return emailCtrl
+
 }
