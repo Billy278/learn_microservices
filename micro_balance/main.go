@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"micro_balance/server"
 	"os"
@@ -11,6 +12,7 @@ import (
 
 func main() {
 	if os.Getenv("MODE") == "GRPC" {
+		fmt.Println("GRPC service")
 		server.NewGRPCServer()
 	} else {
 		server.NewServer()
