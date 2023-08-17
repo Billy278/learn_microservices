@@ -2,6 +2,7 @@
 
 ## ARSITECTUR AND TABLE
 
+<<<<<<< HEAD
 ### MODE RESTful
 
 ![Getting Started](img.png)
@@ -9,6 +10,9 @@
 ### MODE GRPC
 
 ![Getting Started](img2.png)
+=======
+![Getting Started](img.png)
+>>>>>>> 19146a26e8a383922e5cb90bd38edb100c72c398
 
 ## Endpoint:
 
@@ -40,7 +44,7 @@
 - /products/:id [PUT] =>update product using by service taransaksi
 - /product/:id [DELETE]
 
- 5. Product :
+5.  Product :
 
 - /transaksi [POST] => create transaksi
 
