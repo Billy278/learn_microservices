@@ -216,6 +216,19 @@ func (ctrl *CtrlTransaksiImpl) Transaksi(ctx *gin.Context) {
 			return
 		}
 
+		//add data transaksi
+		//		====================================================
+
+		err = ctrl.ServTransaksi.SrvCreate(ctx, transaksiReq)
+		if err != nil {
+			ctx.AbortWithStatusJSON(http.StatusInternalServerError, responses.FailRes{
+				Code:    http.StatusInternalServerError,
+				Message: responses.SomethingWentWrong,
+				Error:   err.Error(),
+			})
+			return
+		}
+
 		ctx.JSON(http.StatusOK, responses.SuccessRes{
 			Code: http.StatusOK,
 			Data: "Transaksi Sussces",
