@@ -133,7 +133,7 @@ func (ctrl *CtrlTransaksiImpl) Transaksi(ctx *gin.Context) {
 		}
 
 		//===================================================================================
-		//get data balance
+		//get data balances
 
 		clientBalance := client.ServiceClientBalance()
 		resBalance, err := clientBalance.FindByidUser(c, &proto.Balance{
