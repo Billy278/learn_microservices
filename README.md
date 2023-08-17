@@ -2,6 +2,12 @@
 
 ## ARSITECTUR AND TABLE
 
+### MODE RESTful
+
+![Getting Started](img.png)
+
+### MODE GRPC
+
 ![Getting Started](img2.png)
 
 ## Endpoint:

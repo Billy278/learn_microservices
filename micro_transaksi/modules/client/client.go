@@ -3,12 +3,13 @@ package client
 import (
 	"fmt"
 	"micro_transaksi/modules/proto"
+	"os"
 
 	"google.golang.org/grpc"
 )
 
 func ServiceClientBalance() proto.BalancesClient {
-	port := ":8090"
+	port := fmt.Sprintf("%v:%v", os.Getenv("hostBalance"), os.Getenv("PortBalance"))
 	conn, err := grpc.Dial(port, grpc.WithInsecure())
 	if err != nil {
 		fmt.Println("could not connect to", port, err)
@@ -18,7 +19,7 @@ func ServiceClientBalance() proto.BalancesClient {
 }
 
 func ServiceClientProduct() proto.ProductsClient {
-	port := ":9090"
+	port := fmt.Sprintf("%v:%v", os.Getenv("hostProduct"), os.Getenv("PortProduct"))
 	conn, err := grpc.Dial(port, grpc.WithInsecure())
 	if err != nil {
 		fmt.Println("could not connect to", port, err)
