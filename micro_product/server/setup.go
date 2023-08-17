@@ -3,6 +3,7 @@ package server
 import (
 	"micro_product/db"
 	"micro_product/modules/controllers"
+	"micro_product/modules/handler"
 	"micro_product/modules/repository"
 	"micro_product/modules/services"
 
@@ -22,4 +23,14 @@ func NewSetup() Controllers {
 	return Controllers{
 		CtrlProduct: ctrlProduct,
 	}
+}
+
+func GRPCSetup() *handler.HandlerProductImpl {
+	db := db.NewDBPostges()
+	productRepo := repository.NewRepoProductImpl(db)
+	productServ := services.NewSrvProductImpl(productRepo)
+	productCtrl := handler.NewHandlerProductImpl(productServ)
+
+	return productCtrl
+
 }

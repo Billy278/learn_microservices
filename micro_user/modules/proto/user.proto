@@ -1,0 +1,47 @@
+syntax = "proto3";
+
+package proto;
+
+option go_package="micro_user/modules/proto";
+
+message User{
+    int32 id =1;
+    string name=2;
+    string email=3;
+    string username=4;
+    string password=5;
+    string no_hp=6;
+    string alamat=7;
+    string jenkel=8;
+}
+
+message LoginIn{
+    string username=1;
+    string password=2;
+}
+
+
+message Tokens{
+    string idtoken=1;
+    string accesstoken=2;
+    string refreshtoken=3;
+}
+message ResponseRegister{
+    int32 code=1;
+    User data=2;
+    string error=3; 
+}
+
+
+message ResponseLogin{
+    int32 code=1;
+    Tokens data=2;
+    string error=3; 
+}
+service Users{
+    rpc Register (User) returns (ResponseRegister);
+    rpc Login (LoginIn) returns (ResponseLogin);
+}
+
+
+//protoc --go_out=paths=source_relative:. --go-grpc_out=paths=source_relative:. modules/proto/*.proto

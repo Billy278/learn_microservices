@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+option go_package="micro_balance/modules/proto";
+
+message Balance{
+    uint64 id =1;
+    uint64 userid=2;
+    float saldo=3;
+}
+
+message Response{
+    int32 code=1;
+    BalanceList data=2;
+    string error=3; 
+}
+
+message BalanceList{
+    repeated Balance list=1;
+}
+
+
+service Balances{
+    rpc Show (Balance) returns (Response);
+    rpc Create(Balance) returns (Response);
+    rpc FindByid (Balance) returns (Response);
+    rpc FindByidUser (Balance) returns (Response);
+    rpc Update (Balance) returns (Response);
+    rpc UpdateByServer (Balance) returns (Response);
+    rpc Delete (Balance) returns (Response);
+
+}
+// protoc --go_out=paths=source_relative:. --go-grpc_out=paths=source_relative:. modules/proto/*.proto

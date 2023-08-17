@@ -1,15 +1,23 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"micro_product/server"
+	"os"
 
 	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
 )
 
 func main() {
-	server.NewServer()
+	if os.Getenv("MODE") == "GRPC" {
+		fmt.Println("GRPC mode")
+		server.NewGRPCServer()
+	} else {
+		server.NewServer()
+	}
+
 }
 func init() {
 	err := godotenv.Load()

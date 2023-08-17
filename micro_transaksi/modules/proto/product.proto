@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+option go_package="micro_transaksi/modules/proto";
+
+
+message Product{
+    uint64 id=1;
+    uint64 userid =2;
+    string name =3;
+    uint64 stock =4;
+    float harga=5;
+
+}
+
+message ResponseProduct{
+    int32 code=1;
+    ProductList data=2;
+    string error=3; 
+}
+
+message ProductList{
+    repeated Product list=1;
+}
+
+
+service Products{
+    rpc Show (Product) returns (ResponseProduct);
+    rpc  Create (Product) returns (ResponseProduct);
+    rpc FindByid (Product) returns (ResponseProduct);
+    rpc Update (Product) returns (ResponseProduct);
+    rpc Delete (Product) returns (ResponseProduct);
+    rpc  UpdateStock(Product) returns (ResponseProduct);
+}
+
+
+// protoc --go_out=paths=source_relative:. --go-grpc_out=paths=source_relative:. modules/proto/*.proto
+
+
+

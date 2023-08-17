@@ -3,6 +3,7 @@ package server
 import (
 	"micro_balance/db"
 	"micro_balance/modules/controllers"
+	"micro_balance/modules/handler"
 	"micro_balance/modules/repository"
 	"micro_balance/modules/services"
 
@@ -22,4 +23,14 @@ func NewSetup() Controllers {
 	return Controllers{
 		CtrlBalance: ctrlBalance,
 	}
+}
+
+func GRPCSetup() *handler.GRPCBalanceImpl {
+	db := db.NewDBPostges()
+	balanceRepo := repository.NewRepoBalanceImpl(db)
+	balanceServ := services.NewServBalanceImpl(balanceRepo)
+	balanceCtrl := handler.NewGRPCBalanceImpl(balanceServ)
+
+	return balanceCtrl
+
 }

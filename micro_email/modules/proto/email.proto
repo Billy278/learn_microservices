@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+option go_package="micro_email/modules/proto";
+
+message Email{
+    uint64 id=1;
+    string sender=2;
+    string name_receiver=3;
+    string name_product=4;
+    float harga =5;
+    uint64 qty=6;
+    float total=7;
+    string email_receiver=8;
+}
+
+message Response{
+    int64 code=1;
+    EmailList data=2;
+    string error =3;
+}
+
+message EmailList{
+    repeated Email list =1;
+}
+
+service EmailSrv{
+    rpc SendEmail (Email) returns (Response);
+}
+
+// protoc --go_out=paths=source_relative:. --go-grpc_out=paths=source_relative:. modules/proto/*.proto
